@@ -75,9 +75,12 @@ class UsersTable extends Table
      * @return \Cake\ORM\RulesChecker
      */
     public function buildRules(RulesChecker $rules): RulesChecker
-    {
-        $rules->add($rules->isUnique(['email', 'Email sudah digunakan']));
+{
+    $rules->add(
+        $rules->isUnique(['email']),
+        ['errorField' => 'email', 'message' => 'Email sudah digunakan']
+    );
 
-        return $rules;
-    }
+    return $rules;
+}
 }

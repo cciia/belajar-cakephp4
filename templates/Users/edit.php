@@ -24,6 +24,9 @@
                 <?php
                     echo $this->Form->control('nama');
                     echo $this->Form->control('email');
+                    echo $this->Form->control('foto', [
+                        'type' => 'file'
+                    ]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

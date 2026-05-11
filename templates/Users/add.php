@@ -12,15 +12,22 @@
         </div>
     </aside>
     <div class="column-responsive column-80">
-        <div class="users form content">
-            <?= $this->Form->create($user) ?>
+       <div class="users form content">
+            <?= $this->Form->create($user, ['type' => 'file']) ?>
             <fieldset>
                 <legend><?= __('Add User') ?></legend>
+
                 <?php
                     echo $this->Form->control('nama');
                     echo $this->Form->control('email');
+
+                    echo $this->Form->control('foto', [
+                        'type' => 'file'
+                    ]);
                 ?>
+
             </fieldset>
+
             <?= $this->Form->button(__('Submit')) ?>
             <?= $this->Form->end() ?>
         </div>

@@ -16,6 +16,7 @@
                     <th><?= $this->Paginator->sort('email') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th><?= $this->Paginator->sort('modified') ?></th>
+                    <th>Foto</th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
@@ -27,6 +28,18 @@
                     <td><?= h($user->email) ?></td>
                     <td><?= h($user->created) ?></td>
                     <td><?= h($user->modified) ?></td>
+                  <td>
+    <?php if (!empty($user->foto)): ?>
+        <img 
+            src="<?= $this->Url->image($user->foto) ?>" 
+            width="60"
+            style="cursor:pointer;"
+            onclick="openImage(this.src)"
+        >
+    <?php else: ?>
+        <span>Tidak ada foto</span>
+    <?php endif; ?>
+</td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
@@ -48,3 +61,32 @@
         <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
     </div>
 </div>
+    <div id="imgModal" style="
+        display:none;
+        position:fixed;
+        top:0; left:0;
+        width:100%; height:100%;
+        background:rgba(0,0,0,0.9);
+        justify-content:center;
+        align-items:center;
+        z-index:9999;
+    ">
+
+        <span onclick="closeImage()" 
+            style="position:absolute; top:20px; right:30px;
+            color:white; font-size:35px; cursor:pointer;">
+            &times;
+        </span>
+
+        <img id="modalImg" style="max-width:90%; max-height:90%;">
+    </div>
+    <script>
+    function openImage(src) {
+        document.getElementById('modalImg').src = src;
+        document.getElementById('imgModal').style.display = 'flex';
+    }
+
+    function closeImage() {
+        document.getElementById('imgModal').style.display = 'none';
+    }
+    </script>

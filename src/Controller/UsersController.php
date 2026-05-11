@@ -45,19 +45,37 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
     public function add()
-    {
-        $user = $this->Users->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+{
+    $user = $this->Users->newEmptyEntity();
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+    if ($this->request->is('post')) {
+
+        $data = $this->request->getData();
+        $file = $data['foto'];
+        unset($data['foto']);
+
+        $user = $this->Users->patchEntity($user, $data);
+
+        if ($file && $file->getClientFilename()) {
+
+            $filename = time() . '_' . $file->getClientFilename();
+
+            $uploadPath = WWW_ROOT . 'img' . DS . $filename;
+
+            $file->moveTo($uploadPath);
+
+            $user->foto = $filename;
         }
-        $this->set(compact('user'));
+        if ($this->Users->save($user)) {
+            $this->Flash->success('User berhasil ditambahkan');
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->Flash->error('Gagal menyimpan user');
     }
+
+    $this->set(compact('user'));
+}
 
     /**
      * Edit method
@@ -102,4 +120,6 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    
 }
