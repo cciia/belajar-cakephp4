@@ -40,6 +40,7 @@ class UsersTable extends Table
         parent::initialize($config);
 
         $this->setTable('users');
+        $this->hasMany('Posts');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
@@ -57,11 +58,11 @@ class UsersTable extends Table
         $validator
             ->scalar('nama')
             ->maxLength('nama', 100)
-            ->allowEmptyString('nama');
+            ->notEmptyString('nama', 'Nama wajib diisi');
 
         $validator
             ->email('email')
-            ->allowEmptyString('email');
+            ->notEmptyString('email', 'Email wajib diisi');
 
         return $validator;
     }
@@ -75,7 +76,7 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
+        $rules->add($rules->isUnique(['email', 'Email sudah digunakan']));
 
         return $rules;
     }
