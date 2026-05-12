@@ -27,11 +27,12 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-use Authentication\Middleware\AutenticationMiddleware;
+use Authentication\Middleware\AuthenticationMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Cake\Roating\Router;
+use Authentication\AuthenticationServiceProviderInterface;
+use Cake\Routing\Router;
 
 /**
  * Application setup class.
@@ -39,7 +40,7 @@ use Cake\Roating\Router;
  * This defines the bootstrapping logic and middleware layers you
  * want to use in your application.
  */
-class Application extends BaseApplication
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface
 {
     /**
      * Load all the application configuration and bootstrap logic.
@@ -66,8 +67,9 @@ class Application extends BaseApplication
          */
         if (Configure::read('debug')) {
             $this->addPlugin('DebugKit');
+           
         }
-
+        $this->addPlugin('Authentication');
         // Load more plugins here
     }
 
@@ -106,7 +108,7 @@ class Application extends BaseApplication
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
             ]));
-
+        $middlewareQueue->add(new AuthenticationMiddleware($this));
         return $middlewareQueue;
     }
 
@@ -117,6 +119,35 @@ class Application extends BaseApplication
      * @return void
      * @link https://book.cakephp.org/4/en/development/dependency-injection.html#dependency-injection
      */
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    {
+        $service = new AuthenticationService();
+
+        $service->setConfig([
+            'unauthenticatedRedirect' => '/users/login',
+            'queryParam' => 'redirect',
+        ]);
+
+        $service->loadIdentifier('Authentication.Password', [
+            'fields' => [
+                'username' => 'email',
+                'password' => 'password',
+            ]
+        ]);
+
+        $service->loadAuthenticator('Authentication.Session');
+
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                'username' => 'email',
+                'password' => 'password',
+            ],
+            'loginUrl' => '/users/login',
+        ]);
+
+        return $service;
+    }
+    
     public function services(ContainerInterface $container): void
     {
     }

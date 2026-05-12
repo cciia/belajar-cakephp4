@@ -160,5 +160,37 @@ class UsersController extends AppController
 
         $this->set(compact('user'));
     }
+
+    public function login()
+    {
+        $this->request->allowMethod(['get', 'post']);
+
+        $result = $this->Authentication->getResult();
+
+        if ($result->isValid()) {
+
+            $target = $this->Authentication->getLoginRedirect()
+                ?? ['action' => 'index'];
+
+            return $this->redirect($target);
+        }
+
+        if ($this->request->is('post') && !$result->isValid()) {
+
+            $this->Flash->error('Email atau password salah');
+        }
+    }
+
+    public function logout()
+    {
+        $result = $this->Authentication->getResult();
+
+        if ($result->isValid()) {
+
+            $this->Authentication->logout();
+
+            return $this->redirect(['action' => 'login']);
+        }
+    }
     
 }
