@@ -20,6 +20,32 @@
         ['action' => 'add'],
         ['class' => 'button float-right']
     ) ?>
+    <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
+
+        <?php if (!empty($identity->foto)): ?>
+
+            <?= $this->Html->image($identity->foto, [
+                'width' => '70',
+                'style' => 'border-radius:50%; object-fit:cover;'
+            ]) ?>
+
+        <?php endif; ?>
+
+        <div>
+            <h4 style="margin:0;">
+                Halo, <?= h($identity->nama) ?> 👋
+            </h4>
+
+            <small>
+                <?= h($identity->email) ?>
+            </small>
+
+            <small>
+                Role: <?= h($identity->role) ?>
+            </small>
+        </div>
+
+    </div>
     <h3><?= __('Users') ?></h3>
     <div class="table-responsive">
         <table>
@@ -57,7 +83,17 @@
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                          <?php if ($isAdmin): ?>
+
+                        <?= $this->Form->postLink(
+                            __('Delete'),
+                            ['action' => 'delete', $user->id],
+                            [
+                                'confirm' => __('Are you sure you want to delete # {0}?', $user->id)
+                            ]
+                        ) ?>
+
+                    <?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

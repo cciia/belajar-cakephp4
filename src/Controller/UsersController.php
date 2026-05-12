@@ -20,7 +20,11 @@ class UsersController extends AppController
     {
         $users = $this->paginate($this->Users);
 
-        $this->set(compact('users'));
+        $identity = $this->request->getAttribute('identity');
+
+        $isAdmin = $identity->role ==='admin';
+
+        $this->set(compact('users', 'identity', 'isAdmin'));
     }
 
     /**
