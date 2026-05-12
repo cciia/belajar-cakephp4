@@ -27,6 +27,14 @@
                     <td><?= h($user->email) ?></td>
                 </tr>
                 <tr>
+                    <th><?=_('Foto')?></th>
+                    <td>
+                        <?= $this->Html->image($user->foto, [
+                            'width' => '150'
+                        ]) ?>
+                    </td>
+                </tr>
+                <tr>
                     <th><?= __('Id') ?></th>
                     <td><?= $this->Number->format($user->id) ?></td>
                 </tr>

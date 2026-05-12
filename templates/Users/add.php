@@ -20,6 +20,7 @@
                 <?php
                     echo $this->Form->control('nama');
                     echo $this->Form->control('email');
+                    echo $this->form->control('password');
 
                     echo $this->Form->control('foto', [
                         'type' => 'file'

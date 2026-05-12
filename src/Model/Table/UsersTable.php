@@ -56,17 +56,17 @@ class UsersTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('nama')
-            ->maxLength('nama', 100)
-            ->notEmptyString('nama', 'Nama wajib diisi');
+            ->notEmptyString('nama')
 
-        $validator
             ->email('email')
-            ->notEmptyString('email', 'Email wajib diisi');
+            ->notEmptyString('email')
+
+            ->scalar('password')
+            ->minLength('password', 6)
+            ->notEmptyString('password');
 
         return $validator;
     }
-
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.
@@ -75,12 +75,12 @@ class UsersTable extends Table
      * @return \Cake\ORM\RulesChecker
      */
     public function buildRules(RulesChecker $rules): RulesChecker
-{
-    $rules->add(
-        $rules->isUnique(['email']),
-        ['errorField' => 'email', 'message' => 'Email sudah digunakan']
-    );
+    {
+        $rules->add(
+            $rules->isUnique(['email']),
+            ['errorField' => 'email', 'message' => 'Email sudah digunakan']
+        );
 
-    return $rules;
-}
+        return $rules;
+    }
 }

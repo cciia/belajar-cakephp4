@@ -45,37 +45,37 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
      */
     public function add()
-{
-    $user = $this->Users->newEmptyEntity();
+    {
+        $user = $this->Users->newEmptyEntity();
 
-    if ($this->request->is('post')) {
+        if ($this->request->is('post')) {
 
-        $data = $this->request->getData();
-        $file = $data['foto'];
-        unset($data['foto']);
+            $data = $this->request->getData();
+            $file = $data['foto'];
+            unset($data['foto']);
 
-        $user = $this->Users->patchEntity($user, $data);
+            $user = $this->Users->patchEntity($user, $data);
 
-        if ($file && $file->getClientFilename()) {
+            if ($file && $file->getClientFilename()) {
 
-            $filename = time() . '_' . $file->getClientFilename();
+                $filename = time() . '_' . $file->getClientFilename();
 
-            $uploadPath = WWW_ROOT . 'img' . DS . $filename;
+                $uploadPath = WWW_ROOT . 'img' . DS . $filename;
 
-            $file->moveTo($uploadPath);
+                $file->moveTo($uploadPath);
 
-            $user->foto = $filename;
+                $user->foto = $filename;
+            }
+            if ($this->Users->save($user)) {
+                $this->Flash->success('The user has been saved');
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->error('The user could not be saved');
         }
-        if ($this->Users->save($user)) {
-            $this->Flash->success('User berhasil ditambahkan');
-            return $this->redirect(['action' => 'index']);
-        }
 
-        $this->Flash->error('Gagal menyimpan user');
+        $this->set(compact('user'));
     }
-
-    $this->set(compact('user'));
-}
 
     /**
      * Edit method
@@ -121,5 +121,44 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    public function register()
+    {
+        $user = $this->Users->newEmptyEntity();
+
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData();
+
+            $file = $data['foto'];
+
+            unset($data['foto']);
+
+            $user = $this->Users->patchEntity($user, $data);
+
+            if ($file && $file->getClientFilename()) {
+
+                $filename = time() . '_' . $file->getClientFilename();
+
+                $uploadPath = WWW_ROOT . 'img' . DS . $filename;
+
+                $file->moveTo($uploadPath);
+
+                $user->foto = $filename;
+            }
+
+            if ($this->Users->save($user)) {
+
+                $this->Flash->success('Register berhasil');
+
+                return $this->redirect(['action' => 'index']);
+            }
+
+            debug($user->getErrors());
+            die;
+            $this->Flash->error('Register gagal');
+        }
+
+        $this->set(compact('user'));
+    }
     
 }

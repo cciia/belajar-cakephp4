@@ -29,17 +29,17 @@
                     <td><?= h($user->created) ?></td>
                     <td><?= h($user->modified) ?></td>
                   <td>
-    <?php if (!empty($user->foto)): ?>
-        <img 
-            src="<?= $this->Url->image($user->foto) ?>" 
-            width="60"
-            style="cursor:pointer;"
-            onclick="openImage(this.src)"
-        >
-    <?php else: ?>
-        <span>Tidak ada foto</span>
-    <?php endif; ?>
-</td>
+            <?php if (!empty($user->foto)): ?>
+                <img 
+                    src="<?= $this->Url->image($user->foto) ?>" 
+                    width="60"
+                    style="cursor:pointer;"
+                    onclick="openImage(this.src)"
+                >
+            <?php else: ?>
+                <span>Tidak ada foto</span>
+            <?php endif; ?>
+        </td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
