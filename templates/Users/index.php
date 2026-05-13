@@ -81,15 +81,22 @@
             <?php endif; ?>
         </td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                          <?php if ($isAdmin): ?>
+                        <?= $this->Html->link('<i class="fas fa-eye"></i>',
+                        ['action' => 'view', $user->id], ['escape' => false, 'title' => 'View']) ?>
+                        
+                        <?= $this->Html->link('<i class="fas fa-edit"></i>', 
+                        ['action' => 'edit', $user->id], ['escape' => false, 'title' => 'Edit']) ?>
+                        
+                        <?php if ($isAdmin): ?>
 
                         <?= $this->Form->postLink(
-                            __('Delete'),
+                            '<i class="fas fa-trash"></i>',
                             ['action' => 'delete', $user->id],
                             [
-                                'confirm' => __('Are you sure you want to delete # {0}?', $user->id)
+                                'confirm' => __('Are you sure you want to delete # {0}?', $user->id),
+                                'escape' => false,
+                                'title' => 'Delete',
+                                'class' => 'delete-icon'
                             ]
                         ) ?>
 
@@ -130,6 +137,16 @@
 
         <img id="modalImg" style="max-width:90%; max-height:90%;">
     </div>
+    
+    .delete-icon {
+    background: none;
+    border: none;
+    padding: 0;
+    color: red;
+    cursor: pointer;
+    font-size: 16px;
+    }
+    
     <script>
     function openImage(src) {
         document.getElementById('modalImg').src = src;

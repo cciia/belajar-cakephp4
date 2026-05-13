@@ -40,10 +40,9 @@ class UsersTable extends Table
         parent::initialize($config);
 
         $this->setTable('users');
-        $this->hasMany('Posts');
-        $this->setDisplayField('id');
+        $this->setDisplayField('nama');
         $this->setPrimaryKey('id');
-
+        $this->hasMany('Beritas');
         $this->addBehavior('Timestamp');
     }
 
